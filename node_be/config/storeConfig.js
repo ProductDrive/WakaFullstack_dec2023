@@ -19,8 +19,31 @@ export const readPlacesFromFile = async () => {
     try {
         const data = await fs.readFile(filePath, 'utf8'); // Read the file with UTF-8 encoding
         const jsonData = JSON.parse(data);
-        console.log('JSON data read from', filePath, jsonData);
         return jsonData;
+    } catch (err) {
+        console.error('Error:', err);
+    }
+};
+
+export const readPlacesFromFileByName = async (searchName) => {
+    try {
+        const data = await fs.readFile(filePath, 'utf8'); // Read the file with UTF-8 encoding
+        const jsonData = JSON.parse(data);
+        // Filter places whose names contain the search name
+        const places = jsonData.places.filter(place => place.name.toLowerCase().includes(searchName.toLowerCase()));
+
+        return places;
+    } catch (err) {
+        console.error('Error:', err);
+    }
+};
+
+export const countPlacesInFile = async () => {
+    try {
+        const data = await fs.readFile(filePath, 'utf8'); // Read the file with UTF-8 encoding
+        const jsonData = JSON.parse(data);
+        // Return the count of places
+        return jsonData.places.length;
     } catch (err) {
         console.error('Error:', err);
     }

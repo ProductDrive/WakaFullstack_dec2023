@@ -7,7 +7,8 @@
       "category": "BusStation",
       "city": "Walsall",
       "latitude": 52.58541107,
-      "longitude": -1.982409
+      "longitude": -1.982409,
+      "needSave": false
     },
     {
       "id": "d975ea96-49f5-4640-89eb-7bd534eac9b2",
@@ -17,7 +18,8 @@
       "city": "Birmingham",
       "phoneNumber": "NA",
       "latitude": 52.47764587,
-      "longitude": -1.89869404
+      "longitude": -1.89869404,
+      "needSave": false
     }
   ]
 }

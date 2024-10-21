@@ -78,6 +78,36 @@ router.get('/placesfromapi', placesController.getPlacefromPlacesAPI);
 
 /**
  * @swagger
+ * /api/place/searchplaces:
+ *   get:
+ *     description: Get places from Bing Places API
+ *     parameters:
+ *       - name: loc
+ *         in: query
+ *         description: Location query
+ *     responses:
+ *       200:
+ *         description: Array of places
+ *         schema:
+ *           $ref: '#/definitions/Place'
+ * 
+ */
+router.get('/searchplaces', placesController.getPlacesSearch);
+
+
+/**
+ * @swagger
+ * /api/place/placescount:
+ *   get:
+ *     description: Get number of places in Database
+ *     responses:
+ *       200:
+ *         description: integer
+ */
+router.get('/placescount', placesController.getPlacesCount);
+
+/**
+ * @swagger
  * /api/place/placeInCat:
  *   get:
  *     description: Get Places count in Category
