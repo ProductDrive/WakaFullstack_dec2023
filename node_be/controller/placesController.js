@@ -1,10 +1,4 @@
-/* TODO: Create another engine for Places
 
-        - Step: create storeconfig file: perform CRUD on the data here
-        - Step: create places API processor file: call virtual earth places here and refine the response
-        - Implement places controller methods for the new STORE
-    AI chat can be useful if people want to know historical facts about places
-*/
 import { createPlace, readAllPlaces, readPlaceById, countPlaces } from '../config/postgresPlacesService.js';
 import { getLocations, getSearchLocations } from '../config/placesapiprocessor.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,26 +6,24 @@ import { v4 as uuidv4 } from 'uuid';
 const addPlaces = async (req, res) => {
     let model = {
         id: uuidv4(),
-        imageUrl: req.body.imageUrl,
         name: req.body.name,
         address: req.body.address,
         category: req.body.category,
         city: req.body.city,
-        phoneNumber: req.body.phoneNumber || 'NA',
         latitude: req.body.latitude,
         longitude: req.body.longitude,
-        searchedTimes: req.body.searchedTimes,
-        postedBy: req.body.postedBy
+        needSave: false,
     }
-
-    await createPlace(model);
-
-    res.status(200).send({
-        status: true,
-        response: "Place Posted Successfully!",
-        needsave: true,
-        returnObj: model
+    console.log(model)
+    await createPlace(model).then(place => {
+        res.status(200).send({
+            status: true,
+            response: "Place saved successfully!",
+            returnObj: model
+        });
     });
+
+    
 };
 
 const getAllPlaces = async (req, res) => {

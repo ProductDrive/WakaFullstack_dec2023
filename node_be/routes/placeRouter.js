@@ -12,8 +12,6 @@ const router = express.Router();
  *     properties:
  *       id:
  *         type: string
- *       imageUrl:
- *         type: string
  *       name:
  *         type: string
  *       category:
@@ -22,15 +20,15 @@ const router = express.Router();
  *         type: string
  *       address:
  *         type: string
- *       phoneNumber:
- *         type: string
- *       searchedTimes:
- *         type: integer
- *       postedBy:
- *         type: string
+ *       longitude:
+ *         type: number
+ *       latitude:
+ *         type: number
+ *       needSave:
+ *         type: boolean
  * 
  */
-
+      
 /**
  * @swagger
  * definitions:

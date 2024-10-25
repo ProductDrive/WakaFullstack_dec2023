@@ -3,9 +3,13 @@ import { pool } from './dbConfig.js';
 
 // Create a place
 export const createPlace = async (place) => {
+  if (!place || !place.id || !place.name || !place.address || !place.category || !place.city || place.latitude == null || place.longitude == null) {
+    throw new Error('Invalid place data');
+  }
+
   const query = {
-    text: 'INSERT INTO places (id, name, address, category, city, phoneNumber, latitude, longitude, needSave) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-    values: [place.id, place.name, place.address, place.category, place.city, place.phoneNumber, place.latitude, place.longitude, place.needsave],
+    text: 'INSERT INTO places (id, name, address, category, city, latitude, longitude, needSave) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+    values: [place.id, place.name, place.address, place.category, place.city, place.latitude, place.longitude, place.needSave],
   };
 
   try {
