@@ -7,7 +7,7 @@ export const API_URL = 'https://dev.virtualearth.net/REST/v1/Locations';
 export const API_KEY = process.env.BING_MAPS_API_KEY;
 
 // Helper function to process the response
-function extractPlaceInfoForUser(input) {
+export function extractPlaceInfoForUser(input) {
     const result = input.resourceSets[0].resources.map(resource => {
         const address = resource.address.formattedAddress || [
             resource.address.locality,
