@@ -10,8 +10,9 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 
-# Database Config
+# Database Config file
 dbConfig.js
+node_be\config\dbConfig.js
 
 
 # Runtime data
