@@ -26,6 +26,8 @@ const router = express.Router();
  *         type: number
  *       needSave:
  *         type: boolean
+ *       country:
+ *         type: string
  * 
  */
       
@@ -47,12 +49,23 @@ const router = express.Router();
  * /api/place/allPlaces:
  *   get:
  *     description: Get all places
+ *     parameters:
+ *       - name: country
+ *         in: query
+ *         description: Location query (nullable)
+ *         required: false
+ *         schema:
+ *           type: string
+ *           nullable: true
  *     responses:
  *       200:
  *         description: Array of places
- *         schema:
- *           $ref: '#/definitions/Place'
- * 
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/definitions/Place'
  */
 router.get('/allPlaces', placesController.getAllPlaces);
 

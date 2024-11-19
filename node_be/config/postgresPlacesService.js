@@ -3,13 +3,14 @@ import { pool } from './dbConfig.js';
 
 // Create a place
 export const createPlace = async (place) => {
-  if (!place || !place.id || !place.name || !place.address || !place.category || !place.city || place.latitude == null || place.longitude == null) {
+  console.log(place);
+  if (!place || !place.id || !place.name || !place.address || !place.category || !place.city || !place.country || place.latitude == null || place.longitude == null) {
     throw new Error('Invalid place data');
   }
 
   const query = {
-    text: 'INSERT INTO places (id, name, address, category, city, latitude, longitude, needSave) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-    values: [place.id, place.name, place.address, place.category, place.city, place.latitude, place.longitude, place.needSave],
+    text: 'INSERT INTO places (id, name, address, category, city, latitude, longitude, needSave, country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+    values: [place.id, place.name, place.address, place.category, place.city, place.latitude, place.longitude, place.needSave, place.country],
   };
 
   try {
@@ -55,7 +56,19 @@ export const readPlaceById = async (id) => {
 // Read places by search term
 export const readPlacesBySearchTerm = async (searchTerm) => {
     const query = {
-      text: 'SELECT * FROM places WHERE LOWER(name) LIKE LOWER($1) OR LOWER(category) LIKE LOWER($1) OR LOWER(city) LIKE LOWER($1)',
+      text: `SELECT *
+              FROM places
+              WHERE 
+                LOWER(name) LIKE LOWER($1) 
+                OR LOWER(category) LIKE LOWER($1) 
+                OR LOWER(city) LIKE LOWER($1) 
+                OR LOWER(country) LIKE LOWER($1)
+              ORDER BY 
+                CASE 
+                  WHEN LOWER(country) = LOWER($1) THEN 1
+                  ELSE 2
+                END;
+              `,
       values: [`%${searchTerm}%`],
     };
   

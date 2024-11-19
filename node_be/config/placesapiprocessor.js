@@ -47,6 +47,11 @@ export const getSearchLocations = async (loc, maxResults = 5)=> {
     }
 }
 
+export const getLocationsByCountry = async (country)=> {
+    const placesResults = await readPlacesBySearchTerm(country);
+    return placesResults;
+}
+
 // Function to call the Bing Maps API and process the response
 export const getLocations = async (loc, maxResults = 5)=> {
     const url = `${API_URL}?query=${encodeURIComponent(loc)}&includeNeighborhood=1&include=queryParse&maxResults=${maxResults}&key=${API_KEY}`;

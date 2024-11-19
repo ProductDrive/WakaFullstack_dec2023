@@ -1,6 +1,6 @@
 
 import { createPlace, readAllPlaces, readPlaceById, countPlaces } from '../config/postgresPlacesService.js';
-import { getLocations, getSearchLocations } from '../config/placesapiprocessor.js';
+import { getLocations, getSearchLocations, getLocationsByCountry } from '../config/placesapiprocessor.js';
 import { v4 as uuidv4 } from 'uuid';
 
 const addPlaces = async (req, res) => {
@@ -13,6 +13,7 @@ const addPlaces = async (req, res) => {
         latitude: req.body.latitude,
         longitude: req.body.longitude,
         needSave: false,
+        country: req.body.country
     }
     console.log(model)
     await createPlace(model).then(place => {
@@ -27,10 +28,15 @@ const addPlaces = async (req, res) => {
 };
 
 const getAllPlaces = async (req, res) => {
-    await readAllPlaces().then(places => {
-        console.log('my places', places);
-        res.status(200).send(places);
-    });
+    console.log(req.query.country)
+    if (!req.query.country) {
+        await readAllPlaces().then(places => {
+            res.status(200).send(places);
+        });
+    } else {
+        const apidata = await getLocationsByCountry(req.query.country);
+        res.status(200).send(apidata);
+    }
 };
 
 const getPlacefromPlacesAPI = async (req, res) => {
