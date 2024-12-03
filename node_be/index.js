@@ -12,7 +12,10 @@ const swaggerOptions = {
       version: '1.0.0',
     },
   },
-  apis: ['routes/placeRouter.js', 'routes/catRouter.js', 'routes/cityRouter.js'],
+  apis: [
+    'routes/placeRouter.js', 
+    'routes/notificationRouter.js'
+  ],
 };
 
 // Swagger Docs
@@ -33,7 +36,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, { customC
 
 // Router
 import placerouter from './routes/placeRouter.js';
+import notificationrouter from './routes/notificationRouter.js';
 app.use('/api/place', placerouter);
+app.use('/api/notification', notificationrouter);
 
 // Port
 const PORT = process.env.PORT || 5000;

@@ -30,7 +30,23 @@ const router = express.Router();
  *         type: string
  * 
  */
-      
+   
+/**
+ * @swagger
+ * definitions:
+ *   NotificationUser:
+ *     properties:
+ *       id:
+ *         type: string
+ *       fcmToken:
+ *         type: string
+ *       locationCity:
+ *         type: string
+ *       country:
+ *         type: string
+ * 
+ */
+
 /**
  * @swagger
  * definitions:

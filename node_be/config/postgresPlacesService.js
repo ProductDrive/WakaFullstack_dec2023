@@ -81,6 +81,92 @@ export const readPlacesBySearchTerm = async (searchTerm) => {
     }
   };
 
+
+export const createNotificationUser = async (details) => {
+  //TODO: find a way to clean up expired tokens from the database
+  const query = {
+    text: 'INSERT INTO notificationUsers (id, fcmToken, locationCity) VALUES ($1, $2, $3) RETURNING *',
+  }
+
+  try {
+    const { rows } = await pool.query(query, [details.id, details.fcmToken, details.locationCity]);
+    return rows[0];
+  } catch (err) {
+    console.error('Error creating notification user:', err);
+    throw err;
+  }
+}
+
+export const tokenExists = async (token) => {
+  const query = {
+    text: 'SELECT EXISTS (SELECT 1 FROM notificationUsers WHERE fcmToken = $1)',
+    values: [token],
+  }
+  try {
+    const { rows } = await pool.query(query);
+    return rows[0].exists;
+  } catch (err) {
+    console.error('Error checking token:', err);
+    throw err;
+  }
+}
+
+export const createNotificationGroup = async (details) => {
+  const query = {
+    text: 'INSERT INTO notificationGroups (id, name, city, country) VALUES ($1, $2, $3, $4) RETURNING *',
+  }  
+  try {    
+    const { rows } = await pool.query(query, [details.id, details.name, details.city, details.country]);
+    return rows[0];
+  } catch (err) {
+    console.error('Error creating notification group:', err);
+    throw err;
+  }
+}
+
+export const notificationGroupExists = async (details) => {
+  const query = {
+    text: 'SELECT EXISTS (SELECT 1 FROM notificationGroups WHERE name = $1)',
+    values: [details.name],
+  }
+  try {
+    const { rows } = await pool.query(query);
+    return rows[0].exists;
+  } catch (err) {
+    console.error('Error checking notification group:', err);
+    throw err;
+  }
+}
+
+export const createNotificationSubscription = async (details) => {
+  const query = {
+    text: 'INSERT INTO notificationSubscriptions (id, notificationUserId, notificationGroupId) VALUES ($1, $2, $3) RETURNING *',
+  }  
+  try {    
+    const { rows } = await pool.query(query, [details.id, details.notificationUserId, details.notificationGroupId]);
+    return rows[0];
+  } catch (err) {
+    console.error('Error creating notification subscription:', err);
+    throw err;
+  }
+}
+
+export const deleteNotificationSubscription = async (userId) => {
+  const query = {
+    text: 'DELETE FROM notificationSubscriptions WHERE notificationUserId = $1 RETURNING *',
+    values: [userId],
+  };
+  
+  try {
+    const result = await pool.query(query);
+    return result.rowCount; // Return the number of rows deleted
+  } catch (err) {
+    console.error('Error deleting notification subscription:', err);
+    throw err;
+  } 
+  
+}
+
 // Update a place
 export const updatePlace = async (id, place) => {
   const query = {

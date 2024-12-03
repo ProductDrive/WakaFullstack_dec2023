@@ -1,5 +1,5 @@
 
-import { createPlace, readAllPlaces, readPlaceById, countPlaces } from '../config/postgresPlacesService.js';
+import { createPlace, readAllPlaces, readPlaceById, countPlaces, createNotificationUser } from '../config/postgresPlacesService.js';
 import { getLocations, getSearchLocations, getLocationsByCountry } from '../config/placesapiprocessor.js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -65,6 +65,7 @@ const getPlacesCount = async (req, res) => {
         });
     }
 };
+
 
 const getPlaceCategorization = async (req, res) => {
     // let sql = 'SELECT waka_db.categories.name AS categoryName, waka_db.places.id AS placeId FROM waka_db.categories JOIN waka_db.places ON waka_db.categories.id = waka_db.places.categoryId;';
@@ -172,7 +173,7 @@ export default {
     getPlacesCount
 };
 
-
+//whenever a notificationUser is added, check if the locationCity is in notificationGroups, if not add it then add notificationSubscriptions
 
 
 // ============================================

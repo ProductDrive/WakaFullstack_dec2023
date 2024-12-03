@@ -59,7 +59,6 @@ export const getLocations = async (loc, maxResults = 5)=> {
     try {
         const response = await fetch(url);
         console.log(response);
-        // Check if the response is OK (status 200-299)
         if (!response.ok) {
             throw new Error(`Error fetching data: ${response.statusText}`);
         }
@@ -78,8 +77,6 @@ export const getLocations = async (loc, maxResults = 5)=> {
         return { error: error.message };
     }
 }
-
-
 
 
 
