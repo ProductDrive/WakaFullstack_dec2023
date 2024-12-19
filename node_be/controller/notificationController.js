@@ -1,6 +1,74 @@
-
-import { createNotificationUser, tokenExists, notificationGroupExists, createNotificationGroup } from '../config/postgresPlacesService.js';
+import { createNotificationUser, tokenExists, notificationGroupExists, createNotificationGroup, getNotificationUsersCount, getPaginatedFcmTokens } from '../config/postgresPlacesService.js';
 import { v4 as uuidv4 } from 'uuid';
+import admin from "firebase-admin";
+
+const serviceAccount = {
+  type: process.env.FIREBASE_TYPE,
+      project_id: process.env.FIREBASE_PROJECT_ID,
+      private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+      private_key: process.env.FIREBASE_PRIVATE_KEY,
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      client_id: process.env.FIREBASE_CLIENT_ID,
+      auth_uri: process.env.FIREBASE_AUTH_URI,
+      token_uri: process.env.FIREBASE_TOKEN_URI,
+      auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_CERT_URL,
+      client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+}
+admin.initializeApp({
+  
+  credential: admin.credential.cert(serviceAccount),
+});
+
+// Endpoint to send notifications to multiple users
+const sendNotifications = async (req, res) => {
+  console.log("serviceAccount",serviceAccount);
+  //const { title, body } = req.body; // Extract title and body from the request
+  const tokens = [];
+
+  try {
+    // Get the total count of notification users
+    const tokenCount = await getNotificationUsersCount();
+    const batchFetchCount = Math.ceil(tokenCount / 500);
+
+    // Fetch tokens concurrently in batches
+    const batchPromises = Array.from({ length: batchFetchCount }, (_, i) =>
+      getPaginatedFcmTokens(500, i * 500)
+    );
+    const tokenBatches = await Promise.all(batchPromises);
+    console.log("tokenBatches",tokenBatches);
+
+    // Flatten the fetched token batches into a single array
+    tokenBatches.forEach((batch) => tokens.push(...batch));
+    console.log(tokens);
+    // Create notification messages
+    const messages = tokens.map((token) => ({
+      notification: {
+        title: "Waka Traffic Alert",
+        body: "Alert: Traffic congestion in your area from BE",
+      },
+      token,
+    }));
+    console.log(messages);
+    // Send notifications in batches using Firebase
+    const responses = await Promise.all(
+      messages.map((message) => admin.messaging().send(message))
+    );
+
+    // Calculate success and failure counts
+    const successes = responses.filter((r) => r.success).length;
+    const failures = responses.filter((r) => !r.success).length;
+
+    // Respond with the results
+    res.status(200).send({
+      message: "Notifications sent",
+      successCount: successes,
+      failureCount: failures,
+    });
+  } catch (error) {
+    console.error("Error sending notifications:", error);
+    res.status(500).send({ message: "Failed to send notifications", error });
+  }
+};
 
 
 const addNotificationUser = async (req, res) => {
@@ -71,6 +139,22 @@ const addNotificationUser = async (req, res) => {
     }
   };
   
-  
+  //====================================== Private functions =======================================
 
-export default { addNotificationUser };
+  const getIterationCount = async (number) => {
+    if  (number <= 500){
+        return number
+    }
+    else{
+      if(number % 500 == 0){
+        return number / 500
+      }
+      else{
+        return Math.floor(number / 500) + 1
+      }
+    }
+  };
+
+export default { addNotificationUser, sendNotifications };
+
+

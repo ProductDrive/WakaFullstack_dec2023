@@ -111,6 +111,37 @@ export const tokenExists = async (token) => {
   }
 }
 
+export const getPaginatedFcmTokens = async (limit, offset) => {
+  const query = {
+    text: 'SELECT fcmtoken FROM notificationUsers ORDER BY id LIMIT $1 OFFSET $2',
+  };
+
+  try {
+    const { rows } = await pool.query(query, [limit, offset]);
+    console.log("notUser",rows);
+    return rows.map((row) => row.fcmtoken); // Extract the tokens into an array
+  } catch (err) {
+    console.error('Error retrieving paginated FCM tokens:', err);
+    throw err;
+  }
+};
+
+export const getNotificationUsersCount = async () => {
+  const query = {
+    text: 'SELECT COUNT(*) AS count FROM notificationUsers',
+  };
+
+  try {
+    const { rows } = await pool.query(query);
+    return parseInt(rows[0].count, 10); // Convert count to a number
+  } catch (err) {
+    console.error('Error retrieving notification users count:', err);
+    throw err;
+  }
+};
+
+
+
 export const createNotificationGroup = async (details) => {
   const query = {
     text: 'INSERT INTO notificationGroups (id, name, city, country) VALUES ($1, $2, $3, $4) RETURNING *',

@@ -42,4 +42,18 @@ const router = express.Router();
  */
 router.post('/user', notificationController.addNotificationUser);
 
+
+/**
+ * @swagger
+ * /api/notification/send:
+ *   get:
+ *     description: Send notifications for testing purposes
+ *     responses:
+ *       200:
+ *         description: returns 200
+ * 
+ */
+router.get('/send', notificationController.sendNotifications);
+
+
 export default router;
