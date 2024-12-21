@@ -1,4 +1,4 @@
-import { pool } from './dbConfig.js';
+import { pool } from '../config/dbConfig.js';
 
 
 // Create a place

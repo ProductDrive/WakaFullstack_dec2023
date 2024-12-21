@@ -1,4 +1,4 @@
-import { createNotificationUser, tokenExists, notificationGroupExists, createNotificationGroup, getNotificationUsersCount, getPaginatedFcmTokens } from '../config/postgresPlacesService.js';
+import { createNotificationUser, tokenExists, notificationGroupExists, createNotificationGroup, getNotificationUsersCount, getPaginatedFcmTokens } from '../services/postgresPlacesService.js';
 import { v4 as uuidv4 } from 'uuid';
 import admin from "firebase-admin";
 

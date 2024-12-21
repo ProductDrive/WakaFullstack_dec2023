@@ -3,17 +3,17 @@ import pg from 'pg';
 const { Pool } = pg;
 
 // Create a pool instance
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-});
-
 // const pool = new Pool({
-//     host: process.env.LOCAL_POSTGRES_HOST,
-//     port:process.env.DB_PORT || 5432,
-//     dbname:process.env.LOCAL_POSTGRES_DATABASE || "postgres",
-//     user: process.env.LOCAL_POSTGRES_USER || "postgres",
-//     password: process.env.LOCAL_POSTGRES_PASSWORD || "7ebXW3kYDURO", 
+//     connectionString: process.env.POSTGRES_URL,
 // });
+
+const pool = new Pool({
+    host: process.env.LOCAL_POSTGRES_HOST,
+    port:process.env.DB_PORT || 5432,
+    dbname:process.env.LOCAL_POSTGRES_DATABASE || "postgres",
+    user: process.env.LOCAL_POSTGRES_USER || "postgres",
+    password: process.env.LOCAL_POSTGRES_PASSWORD || "7ebXW3kYDURO", 
+});
 
 
 // Connect to the database and handle connection errors

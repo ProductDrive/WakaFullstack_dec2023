@@ -1,5 +1,5 @@
 
-import { createPlace, readAllPlaces, readPlaceById, countPlaces, createNotificationUser } from '../config/postgresPlacesService.js';
+import { createPlace, readAllPlaces, readPlaceById, countPlaces, createNotificationUser } from '../services/postgresPlacesService.js';
 import { getLocations, getSearchLocations, getLocationsByCountry } from '../config/placesapiprocessor.js';
 import { v4 as uuidv4 } from 'uuid';
 

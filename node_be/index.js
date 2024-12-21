@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-
+import './services/backgroundjobs.js';
 
 const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 const swaggerOptions = {

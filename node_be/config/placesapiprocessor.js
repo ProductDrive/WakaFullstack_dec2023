@@ -2,7 +2,7 @@
 // bingMapsModule.js
 import 'dotenv/config';
 //import { readPlacesFromFileByName } from './storeConfig.js';
-import { readPlacesBySearchTerm } from './postgresPlacesService.js';
+import { readPlacesBySearchTerm } from '../services/postgresPlacesService.js';
 export const API_URL = 'https://dev.virtualearth.net/REST/v1/Locations';
 export const API_KEY = process.env.BING_MAPS_API_KEY;
 
