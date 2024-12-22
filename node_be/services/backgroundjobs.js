@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import {sendNotification} from './notification.js';
 
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('0 */5 * * *', () => {
      (async () => {
       console.log('Running the background job to send push notifications');
   
