@@ -118,7 +118,6 @@ export const getPaginatedFcmTokens = async (limit, offset) => {
 
   try {
     const { rows } = await pool.query(query, [limit, offset]);
-    console.log("notUser",rows);
     return rows.map((row) => row.fcmtoken); // Extract the tokens into an array
   } catch (err) {
     console.error('Error retrieving paginated FCM tokens:', err);

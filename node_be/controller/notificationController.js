@@ -1,6 +1,7 @@
 import { createNotificationUser, tokenExists, notificationGroupExists, createNotificationGroup, getNotificationUsersCount, getPaginatedFcmTokens } from '../services/postgresPlacesService.js';
 import { v4 as uuidv4 } from 'uuid';
 import admin from "firebase-admin";
+import {sendNotification} from '../services/notification.js';
 
 const serviceAccount = {
   type: process.env.FIREBASE_TYPE,
@@ -21,53 +22,59 @@ admin.initializeApp({
 
 // Endpoint to send notifications to multiple users
 const sendNotifications = async (req, res) => {
-  console.log("serviceAccount",serviceAccount);
-  //const { title, body } = req.body; // Extract title and body from the request
-  const tokens = [];
-
   try {
-    // Get the total count of notification users
-    const tokenCount = await getNotificationUsersCount();
-    const batchFetchCount = Math.ceil(tokenCount / 500);
+        console.log('Sending notifications...', new Date());
+        await sendNotification();
+      } catch (error) {
+        console.error('Error sending notifications:', error);
+      }
+  // console.log("serviceAccount",serviceAccount);
+  // //const { title, body } = req.body; // Extract title and body from the request
+  // const tokens = [];
 
-    // Fetch tokens concurrently in batches
-    const batchPromises = Array.from({ length: batchFetchCount }, (_, i) =>
-      getPaginatedFcmTokens(500, i * 500)
-    );
-    const tokenBatches = await Promise.all(batchPromises);
-    console.log("tokenBatches",tokenBatches);
+  // try {
+  //   // Get the total count of notification users
+  //   const tokenCount = await getNotificationUsersCount();
+  //   const batchFetchCount = Math.ceil(tokenCount / 500);
 
-    // Flatten the fetched token batches into a single array
-    tokenBatches.forEach((batch) => tokens.push(...batch));
-    console.log(tokens);
-    // Create notification messages
-    const messages = tokens.map((token) => ({
-      notification: {
-        title: "Waka Traffic Alert",
-        body: "Alert: Traffic congestion in your area from BE",
-      },
-      token,
-    }));
-    console.log(messages);
-    // Send notifications in batches using Firebase
-    const responses = await Promise.all(
-      messages.map((message) => admin.messaging().send(message))
-    );
+  //   // Fetch tokens concurrently in batches
+  //   const batchPromises = Array.from({ length: batchFetchCount }, (_, i) =>
+  //     getPaginatedFcmTokens(500, i * 500)
+  //   );
+  //   const tokenBatches = await Promise.all(batchPromises);
+  //   console.log("tokenBatches",tokenBatches);
 
-    // Calculate success and failure counts
-    const successes = responses.filter((r) => r.success).length;
-    const failures = responses.filter((r) => !r.success).length;
+  //   // Flatten the fetched token batches into a single array
+  //   tokenBatches.forEach((batch) => tokens.push(...batch));
+  //   console.log(tokens);
+  //   // Create notification messages
+  //   const messages = tokens.map((token) => ({
+  //     notification: {
+  //       title: "Waka Traffic Alert",
+  //       body: "Alert: Traffic congestion in your area from BE",
+  //     },
+  //     token,
+  //   }));
+  //   console.log(messages);
+  //   // Send notifications in batches using Firebase
+  //   const responses = await Promise.all(
+  //     messages.map((message) => admin.messaging().send(message))
+  //   );
 
-    // Respond with the results
-    res.status(200).send({
-      message: "Notifications sent",
-      successCount: successes,
-      failureCount: failures,
-    });
-  } catch (error) {
-    console.error("Error sending notifications:", error);
-    res.status(500).send({ message: "Failed to send notifications", error });
-  }
+  //   // Calculate success and failure counts
+  //   const successes = responses.filter((r) => r.success).length;
+  //   const failures = responses.filter((r) => !r.success).length;
+
+  //   // Respond with the results
+  //   res.status(200).send({
+  //     message: "Notifications sent",
+  //     successCount: successes,
+  //     failureCount: failures,
+  //   });
+  // } catch (error) {
+  //   console.error("Error sending notifications:", error);
+  //   res.status(500).send({ message: "Failed to send notifications", error });
+  // }
 };
 
 

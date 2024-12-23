@@ -17,5 +17,11 @@
             "src": "/(.*)",
             "dest": "index.js"
         }
+    ],
+    "crons": [
+        {
+            "path": "/api/notification/send",
+            "schedule": "*/5 * * * *"
+        }
     ]
 }

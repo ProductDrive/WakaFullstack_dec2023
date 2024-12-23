@@ -11,10 +11,8 @@ export const sendNotification = async() => {
         getPaginatedFcmTokens(500, i * 500)
         );
         const tokenBatches = await Promise.all(batchPromises);
-        console.log("tokenBatches",tokenBatches);
 
         tokenBatches.forEach((batch) => tokens.push(...batch));
-        console.log(tokens);
 
         const messages = tokens.map((token) => ({
         notification: {
@@ -23,7 +21,6 @@ export const sendNotification = async() => {
         },
         token,
         }));
-        console.log(messages);
         // Send notifications in batches using Firebase
         const responses = await Promise.all(
         messages.map((message) => admin.messaging().send(message))
@@ -33,7 +30,7 @@ export const sendNotification = async() => {
         const successes = responses.filter((r) => r.success).length;
         const failures = responses.filter((r) => !r.success).length;
     }catch (error) {
-        console.error('Error sending notifications:', error);
+        console.error('Error Occured');
     }
 
 }
