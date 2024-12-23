@@ -29,6 +29,7 @@ export const sendNotification = async() => {
         // Calculate success and failure counts
         const successes = responses.filter((r) => r.success).length;
         const failures = responses.filter((r) => !r.success).length;
+        return {successes, failures};
     }catch (error) {
         console.error('Error Occured');
     }

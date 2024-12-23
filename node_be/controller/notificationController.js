@@ -24,7 +24,11 @@ admin.initializeApp({
 const sendNotifications = async (req, res) => {
   try {
         console.log('Sending notifications...', new Date());
-        await sendNotification();
+        const result = await sendNotification();
+        return res.status(200).send({
+          status: true,
+          response: result
+        });
       } catch (error) {
         console.error('Error sending notifications:', error);
       }
