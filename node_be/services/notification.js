@@ -19,6 +19,9 @@ export const sendNotification = async() => {
             title: "Waka Traffic Alert",
             body: "Alert: Tap to see Traffic Congestion in your area.",
         },
+        data: {
+            url: "https://waka-places.vercel.app/traffic-notifications"
+        },
         token,
         }));
         // Send notifications in batches using Firebase
