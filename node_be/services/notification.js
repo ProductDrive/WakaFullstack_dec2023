@@ -15,15 +15,16 @@ export const sendNotification = async() => {
         tokenBatches.forEach((batch) => tokens.push(...batch));
 
         const messages = tokens.map((token) => ({
-        notification: {
-            title: "Waka Traffic Alert",
-            body: "Alert: Tap to see Traffic Congestion in your area.",
+        "notification": {
+            "title": "Waka Traffic Alert",
+            "body": "Alert: Tap to see Traffic Congestion in your area.",
         },
-        data: {
-            url: "https://waka-places.vercel.app/traffic-notifications"
+        "data": {
+            "url": "https://waka-places.vercel.app/traffic-notifications"
         },
         token,
         }));
+        console.log("messages",messages);
         // Send notifications in batches using Firebase
         const responses = await Promise.all(
         messages.map((message) => admin.messaging().send(message))

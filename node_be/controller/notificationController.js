@@ -84,7 +84,15 @@ const sendNotifications = async (req, res) => {
 
 const addNotificationUser = async (req, res) => {
     const details = req.body;
+    const { fcmToken, locationCity, country } = details;
   
+    if (!fcmToken || !locationCity || !country) {
+      return res.status(200).send({
+        status: true,
+        response: 'Token already exists',
+        returnObj: null,
+      });
+    }
     try {
       // Check if token already exists
       if (await tokenExists(details.fcmToken)) {
