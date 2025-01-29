@@ -20,7 +20,7 @@ export const sendNotification = async() => {
             "body": "Alert: Tap to see Traffic Congestion in your area.",
         },
         "data": {
-            "url": "https://waka-places.vercel.app/traffic-notifications"
+            "url": "https://www.wakaa.link/traffic-notifications"
         },
         token,
         }));
